@@ -1,0 +1,15 @@
+node_modules/
+.DS_Store
+
+output/
+outputs/
+coverage/
+dist/
+build/
+.next/
+
+storage-state.json
+**/storage-state.json
+capture-results.json
+capture-report.md
+screenshots/
