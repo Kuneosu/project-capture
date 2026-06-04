@@ -1,0 +1,43 @@
+{
+  "name": "project-capture",
+  "version": "0.1.0",
+  "description": "Codex skill and standalone Playwright toolkit for discovering web app routes, selecting capture scope, handling login flows, and generating screenshot reports.",
+  "bin": {
+    "project-capture": "bin/cli.js"
+  },
+  "files": [
+    "bin/",
+    "SKILL.md",
+    "references/",
+    "scripts/",
+    "assets/project-capture-banner-simple.png",
+    "README.md",
+    "README.ko.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "codex",
+    "claude",
+    "gemini",
+    "ai-agent",
+    "skill",
+    "playwright",
+    "screenshots",
+    "screen-capture",
+    "route-discovery",
+    "web-testing"
+  ],
+  "author": "Kuneosu",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kuneosu/project-capture.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Kuneosu/project-capture/issues"
+  },
+  "homepage": "https://github.com/Kuneosu/project-capture#readme",
+  "engines": {
+    "node": ">=18"
+  }
+}

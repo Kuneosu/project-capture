@@ -4,6 +4,9 @@
 
 [한국어 README](README.ko.md)
 
+[![npm](https://img.shields.io/npm/v/project-capture?style=for-the-badge)](https://www.npmjs.com/package/project-capture)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+
 Project Capture is a Codex skill for analyzing a web project, discovering candidate screens, asking for capture scope and authentication details, then capturing the selected screens with Playwright.
 
 It is designed for guided screenshot collection, not for claiming that every possible state in an application can be captured automatically. Dynamic routes, authenticated screens, role-specific views, feature flags, and hidden UI states may require user confirmation or sample URLs.
@@ -24,13 +27,15 @@ It is designed for guided screenshot collection, not for claiming that every pos
 
 ```text
 project-capture/
+├── package.json
+├── bin/
+│   └── cli.js
 ├── SKILL.md
 ├── README.md
 ├── README.ko.md
+├── LICENSE
 ├── assets/
-│   ├── project-capture-banner.png
-│   ├── project-capture-banner-simple.png
-│   └── project-capture-logo.png
+│   └── project-capture-banner-simple.png
 ├── references/
 │   ├── auth-handling.md
 │   └── route-discovery.md
@@ -41,7 +46,39 @@ project-capture/
 
 ## Install
 
-Copy this directory into your Codex skills directory:
+### With npx
+
+Install the skill into the current project:
+
+```bash
+npx project-capture init
+```
+
+This copies the skill into:
+
+```text
+.codex/skills/project-capture/
+.claude/skills/project-capture/
+```
+
+It also updates an existing `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, or `.cursorrules` file with a short project-capture instruction. If none exists, it creates `AGENTS.md`.
+
+Install globally for Codex:
+
+```bash
+npx project-capture init --global-codex
+```
+
+Install for only one local agent directory:
+
+```bash
+npx project-capture init --agent codex
+npx project-capture init --agent claude
+```
+
+### Manual Codex Install
+
+Copy this directory into your Codex global skills directory:
 
 ```bash
 cp -R project-capture ~/.codex/skills/project-capture
@@ -62,10 +99,10 @@ Use this repository as a project screen capture toolkit. First run scripts/disco
 Minimal script flow:
 
 ```bash
-python3 scripts/discover_routes.py /path/to/project \
+npx project-capture discover /path/to/project \
   --output /path/to/project/output/playwright/project-capture-routes.json
 
-npx --yes --package playwright node scripts/capture_pages.mjs \
+npx project-capture capture \
   --base-url http://localhost:3000 \
   --routes /path/to/project/output/playwright/project-capture-routes.json \
   --scope core \
@@ -127,13 +164,13 @@ Manual login is recommended for OAuth, SSO, WebAuthn, CAPTCHA, SMS OTP, and emai
 Discover routes:
 
 ```bash
-python3 scripts/discover_routes.py /path/to/project --output output/playwright/project-capture-routes.json
+npx project-capture discover /path/to/project --output output/playwright/project-capture-routes.json
 ```
 
 Capture core routes:
 
 ```bash
-npx --yes --package playwright node scripts/capture_pages.mjs \
+npx project-capture capture \
   --base-url http://localhost:3000 \
   --routes output/playwright/project-capture-routes.json \
   --scope core \
@@ -145,7 +182,7 @@ npx --yes --package playwright node scripts/capture_pages.mjs \
 Manual login:
 
 ```bash
-npx --yes --package playwright node scripts/capture_pages.mjs \
+npx project-capture capture \
   --base-url http://localhost:3000 \
   --routes output/playwright/project-capture-routes.json \
   --scope static \
@@ -174,3 +211,7 @@ output/playwright/project-capture/
 - Dynamic routes need sample values.
 - The skill does not automatically cycle through multiple roles or accounts.
 - It does not perform visual regression testing.
+
+## Banner
+
+The banner in `assets/project-capture-banner-simple.png` was generated with the `imagegen` skill for this repository. It is intended to communicate the workflow visually: route discovery, browser capture, and screenshot output.

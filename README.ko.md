@@ -4,6 +4,9 @@
 
 [English README](README.md)
 
+[![npm](https://img.shields.io/npm/v/project-capture?style=for-the-badge)](https://www.npmjs.com/package/project-capture)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+
 Project Capture는 웹 프로젝트를 분석하고, 화면 후보를 찾고, 캡처 범위와 로그인 방식을 사용자에게 확인한 뒤, Playwright로 선택된 화면을 캡처하는 Codex 스킬입니다.
 
 이 스킬은 “모든 화면을 무조건 자동 캡처”한다고 주장하지 않습니다. 동적 라우트, 인증이 필요한 화면, 권한별 화면, feature flag 화면, 숨겨진 UI 상태는 사용자 확인이나 샘플 URL이 필요할 수 있습니다.
@@ -24,13 +27,15 @@ Project Capture는 웹 프로젝트를 분석하고, 화면 후보를 찾고, �
 
 ```text
 project-capture/
+├── package.json
+├── bin/
+│   └── cli.js
 ├── SKILL.md
 ├── README.md
 ├── README.ko.md
+├── LICENSE
 ├── assets/
-│   ├── project-capture-banner.png
-│   ├── project-capture-banner-simple.png
-│   └── project-capture-logo.png
+│   └── project-capture-banner-simple.png
 ├── references/
 │   ├── auth-handling.md
 │   └── route-discovery.md
@@ -41,7 +46,39 @@ project-capture/
 
 ## 설치
 
-이 디렉터리를 Codex 스킬 경로로 복사합니다.
+### npx 사용
+
+현재 프로젝트에 스킬을 설치합니다.
+
+```bash
+npx project-capture init
+```
+
+이 명령은 스킬을 아래 경로로 복사합니다.
+
+```text
+.codex/skills/project-capture/
+.claude/skills/project-capture/
+```
+
+또한 기존 `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.cursorrules` 파일 중 하나에 project-capture 사용 지침을 추가합니다. 해당 파일이 없으면 `AGENTS.md`를 생성합니다.
+
+Codex 글로벌 스킬로 설치하려면 다음 명령을 사용합니다.
+
+```bash
+npx project-capture init --global-codex
+```
+
+특정 로컬 에이전트 디렉터리에만 설치할 수도 있습니다.
+
+```bash
+npx project-capture init --agent codex
+npx project-capture init --agent claude
+```
+
+### Codex 수동 설치
+
+이 디렉터리를 Codex 글로벌 스킬 경로로 복사합니다.
 
 ```bash
 cp -R project-capture ~/.codex/skills/project-capture
@@ -62,10 +99,10 @@ Project Capture는 Codex 스킬 형식으로 패키징되어 있지만, 핵심 �
 최소 실행 흐름:
 
 ```bash
-python3 scripts/discover_routes.py /path/to/project \
+npx project-capture discover /path/to/project \
   --output /path/to/project/output/playwright/project-capture-routes.json
 
-npx --yes --package playwright node scripts/capture_pages.mjs \
+npx project-capture capture \
   --base-url http://localhost:3000 \
   --routes /path/to/project/output/playwright/project-capture-routes.json \
   --scope core \
@@ -127,13 +164,13 @@ OAuth, SSO, WebAuthn, CAPTCHA, SMS OTP, 이메일 OTP는 수동 로그인을 권
 라우트 탐색:
 
 ```bash
-python3 scripts/discover_routes.py /path/to/project --output output/playwright/project-capture-routes.json
+npx project-capture discover /path/to/project --output output/playwright/project-capture-routes.json
 ```
 
 핵심 라우트 캡처:
 
 ```bash
-npx --yes --package playwright node scripts/capture_pages.mjs \
+npx project-capture capture \
   --base-url http://localhost:3000 \
   --routes output/playwright/project-capture-routes.json \
   --scope core \
@@ -145,7 +182,7 @@ npx --yes --package playwright node scripts/capture_pages.mjs \
 수동 로그인:
 
 ```bash
-npx --yes --package playwright node scripts/capture_pages.mjs \
+npx project-capture capture \
   --base-url http://localhost:3000 \
   --routes output/playwright/project-capture-routes.json \
   --scope static \
@@ -174,3 +211,7 @@ output/playwright/project-capture/
 - 동적 라우트는 샘플 값이 필요합니다.
 - 여러 권한/계정을 자동 순회하지 않습니다.
 - 시각적 회귀 테스트를 수행하지 않습니다.
+
+## 배너
+
+`assets/project-capture-banner-simple.png` 배너는 이 저장소를 위해 `imagegen` 스킬로 생성했습니다. 라우트 탐색, 브라우저 캡처, 스크린샷 결과 흐름을 직관적으로 전달하는 용도입니다.
